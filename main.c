@@ -7,36 +7,65 @@
 
 #include <stdio.h>
 
-typedef struct Stu             //typedef相当于是把 struct Stu 类型重新起了一个名字
-{
-    char name[20];
-    short age;
-    char tele[12];
-    char sex[5];
-}Stu;
+//求1！+2！+3！+...
+//求阶乘的模块
+//int Jiechen(int n){
+//    if(n==0){
+//        return 1;
+//    }
+//    else{
+//        return n*Jiechen(n-1);
+//    }
+//}
+////求阶乘和的模块
+//int JiechenSum(int n){
+//    int i=0;
+//    int sum=0;
+//    for(i=1;i<=n;i++){
+//        sum=sum+Jiechen(i);
+//    }
+//    return sum;
+//}
+////程序入口
+//int main(){
+//    int n=0;
+//    printf("请输入数字n，以求取1直到n！的和\n");
+//    scanf("%d",&n);
+//    int sum=JiechenSum(n);
+//    printf("%d\n",sum);
+//    return 0;
+//}
 
-void Print1(Stu n){
-    printf("name:%s\n", n.name);
-    printf("age: %d\n", n.age);
-    printf("tele:%s\n", n.tele);
-    printf("sex: %s\n", n.sex);
-}
+// typedef struct Stu             //typedef相当于是把 struct Stu 类型重新起了一个名字
+// {
+//     char name[20];
+//     short age;
+//     char tele[12];
+//     char sex[5];
+// }Stu;
 
-void Print2(Stu* ps){
-    printf("name:%s\n", ps->name);
-    printf("age: %d\n", ps->age);
-    printf("tele:%s\n", ps->tele);
-}
+// void Print1(Stu n){
+//     printf("name:%s\n", n.name);
+//     printf("age: %d\n", n.age);
+//     printf("tele:%s\n", n.tele);
+//     printf("sex: %s\n", n.sex);
+// }
 
-int main(){
-    Stu s={"lisi",20,"15566778899","nan"};
-    //打印结构体数据
-    //Print2更好，不管是在时间方面还是在空间方面。
-    Print1(s);         //传结构体
-    printf("\n");
-    Print2(&s);        //传地址
-    return 0;
-}
+// void Print2(Stu* ps){
+//     printf("name:%s\n", ps->name);
+//     printf("age: %d\n", ps->age);
+//     printf("tele:%s\n", ps->tele);
+// }
+
+// int main(){
+//     Stu s={"lisi",20,"15566778899","nan"};
+//     //打印结构体数据
+//     //Print2更好，不管是在时间方面还是在空间方面。
+//     Print1(s);         //传结构体
+//     printf("\n");
+//     Print2(&s);        //传地址
+//     return 0;
+// }
 
 
 
@@ -103,17 +132,6 @@ int main(){
 //    printf("%s\n",p.s1.arr);
 //    return 0;
 //}
-
-
-
-
-
-
-
-
-
-
-
 
 
 //递归和非递归实现输出第n个斐波那契数列
