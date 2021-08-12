@@ -6,6 +6,349 @@
 //
 
 #include <stdio.h>
+#include <assert.h>   //assert  断言
+#include <unistd.h>
+#include <string.h>
+
+////浮点型在内存中的存储，分为float和double，以及long double型
+//int main(){
+////    9.0
+////    1001.0
+////    (-1)^0 * 1.001 * 2^3
+////    (-1)^s * M     * 2^E
+////    S=0
+////    M=1.001
+////    E=3
+////
+////    0.5
+////    0.1  ---是0.5的二进制表示形式
+////    (-1)^0 * 1.0 * 2^(-1)
+////    S=0;M=1.0;E=-1
+////    E为负数时，实际上真正存入内存中的E为 E+127=126；
+//
+//    int n=9;
+//    float* pFloat=(float*)&n;
+//    //00000000000000000000000000001001 ----补码
+//    //
+//    printf("     n的值为   %d\n",n);
+//    printf("* pFloat的值为:%f\n",*pFloat);  //认为  00000000000000000000000000001001  是浮点型，为0 00000000 00000000000000000001001
+//    //  (-1)^0 * 0.00000000000000000001001 * 2^(-126)       超级小的数字，直接就打印的0.000000
+//
+//    //整型和浮点型的存储方式不同
+//    //整型在内存中以二进制补码的方式存储，
+//
+//    *pFloat=9.0;
+//    //1001.0
+//    //(-1)^0 * 1.0010 * 2^3;
+//    //S=0,M=1.0010,E=3
+//    //0  （3+127）
+//    //0  10000010  00100000000000000000000;
+//    //以上数字按十进制打印出来，就是1091567616
+//    printf("     n的值为   %d\n",n);             //1091567616
+//    printf("* pFloat的值为:%f\n",*pFloat);       //9.000000
+//
+//    return 0;
+//}
+//int main(){
+//    float f=5.5;
+//    //5.5
+//    //101.1
+//    //(-1)^0 * 1.011 * 2^2;
+//    //S=0
+//    //M=1.011
+//    //E=2
+//    //0 (2+127) (小数位只存 . 后面的数字,即 011)
+//    //  0   10000001 01100000000000000000000
+//    //符号位  指数位           小数位
+//    //内存中放的是二进制位。但展示到屏幕上是16进制，4个二进制位是一个16进制位
+//    //0100  0000  1011  0000  0000  0000  0000  0000
+//    //  4    0     B      0    0      0     0    0
+//    //0x40B00000
+//    return 0;
+//}
+
+//int main(){
+//    double a=1E10;
+//    printf("%lf\n",a);
+//    return 0;
+//}
+
+//char的范围是 127～ -128之间,unsigned char的范围为0～255,unsigned 是无符号
+//int main(){
+//    char arr[1000];          //char类型表示的范围为  127～ -128之间
+//    int i=0;
+//    for(i=0;i<1000;i++){
+//        arr[i]=-1-i;
+//    }
+//    printf("%lu\n",strlen(arr));    //strlen()找到\0才停止   所以答案为 长度为 128+127=255
+//    return 0;
+//}
+
+//int main(){
+//    unsigned int i;          //因为unsigned int是无符号整型，所以i的值一直大于0；所以会无限循环下去
+//    for(i=9;i>=0;i--){
+//        printf("%u\n",i);
+//        sleep(1.3);
+//    }
+//
+//    return 0;
+//}
+
+//int main(){
+//    int a=-20;
+//    //10000000000000000000000000010100  --原码
+//    //11111111111111111111111111101011  --反码
+//    //11111111111111111111111111101100  --补码
+//    unsigned int b=10;
+//    //00000000000000000000000000001010  --原码和反码和补码都一样
+//
+//    //相加后为
+//    //11111111111111111111111111110110  --结果的补码
+//    //11111111111111111111111111110101  --结果的反码
+//    //10000000000000000000000000001010  --结果的原码   打印时按照原码打印
+//    //结果为-10
+//    printf("%d\n",a+b);
+//    return 0;
+//}
+
+//交换输出
+//void Switch(int a,int b){
+//    a=a^b;
+//    b=a^b;
+//    a=a^b;
+//    printf("a=%d,b=%d\n",a,b);
+//}
+//
+//int main(){
+//    int a,b;
+//    scanf("a=%d,b=%d",&a,&b);
+//    Switch(a,b);
+//}
+
+//利用指针输出年，月，日
+//void Print(char* str){
+//    int i=0;
+//    printf("year=");
+//    for(i=0;i<4;i++){
+//        printf("%c",*str);
+//        str++;
+//    }
+//    printf("\n");
+//    printf("month=");
+//    for(i=0;i<2;i++){
+//        printf("%c",*str);
+//        str++;
+//    }
+//    printf("\n");
+//    printf("date=");
+//    for(i=0;i<2;i++){
+//        printf("%c",*str);
+//        str++;
+//    }
+//    printf("\n");
+//}
+//int main(){
+//    char arr[8];
+//    scanf("%s",arr);
+//    Print(arr);
+//    return 0;
+//}
+
+//int main(){
+//        printf("%c",73);
+//        printf("%c",32);
+//        printf("%c",99);
+//        printf("%c",97);
+//        printf("%c",110);
+//        printf("%c",32);
+//        printf("%c",100);
+//        printf("%c",111);
+//        printf("%c",32);
+//        printf("%c",105);
+//        printf("%c",116);
+//        printf("%c",33);
+//        return 0;
+//    }
+
+//字符金字塔
+//void Jzt(char a){
+//    int i=0;     //控制行数
+//    for(i=0;i<31;i++){      //打印5行
+//        int j=0;           //控制空格数量
+//        for(j=31-i;j>0;j--){
+//            printf(" ");
+//        }
+//        int k=0;   //控制打印的字母数量
+//        for(k=0;k<=i;k++){
+//            printf("%c ",a);
+//        }
+//        printf("\n");   //每行打印完后换行
+//    }
+//}
+//
+//int main(){
+//    char a;
+//    scanf("%c",&a);  //输入想要打印的内容
+//    Jzt(a);   //金字塔函数
+//    return 0;
+//}
+
+//成绩输入与输出
+//int main(){
+//    int id=0;
+//    float Cyuyan,math,english;
+//    scanf("%d;",&id);
+//    scanf("%f,%f,%f",&Cyuyan,&math,&english);
+//    printf("The each subject score of  No. %d is %.2f, %.2f, %.2f.\n",id,Cyuyan,math,english);
+//    return 0;
+//}
+
+//int main(){
+//    char a=-128;
+//    //100000000000000000000000010000000   ---  -128的原码
+//    //111111111111111111111111101111111   ---  -128的反码
+//    //111111111111111111111111110000000   ---  -128的补码
+//    //10000000发生整形提升，补符号位 1，得到111111111111111111111111110000000,打印规则是无符号数，所以此时的补码和原码一样，打印出来是4294967168
+//
+//    char b=128;
+//    printf("%u\n",a);
+//    printf("%u\n",b);
+//
+//    //%d是打印十进制有符号数字
+//    //%u是打印十进制无符号数字
+//
+//    return 0;
+//}
+
+//设计一个小程序，判断当前机器的字节序
+//int a=20;
+//16进制 ：0x 14 00 00 00
+//大端存储方式：00 00 00 14
+//小端存储方式：14 00 00 00
+//低地址--------------------------------------->>>高地址
+//int Zijiexu(void){
+//    int a=1;
+////    char* p=(char*)&a;
+////    return *p;           //简化之后的代码
+//
+//    //再简化
+//    return *(char*)&a;
+//
+////    if(*p == 1){
+////        return 1;
+////    }
+////    else{
+////        return 0;
+////    }
+//}
+//int main(){
+//    if(Zijiexu()){
+//        printf("小端\n");
+//    }
+//    else{
+//        printf("大端\n");
+//    }
+//    return 0;
+//}
+
+//int main(){
+//    int a=20;  //正数的原码，反码，补码是相同的，和无符号整数是一样的
+//    //00000000000000000000000000010100 ---原码
+//    //00000000000000000000000000010100 ---反码
+//    //0000 0000 0000 0000 0000 0000 0001 0100 ---补码
+//    //  0    0    0    0    0    0    1    4     所以内存展示出来16进制是14000000
+//    int b=-10;
+//    //10000000000000000000000000001010  ---原码
+//    //11111111111111111111111111110101  ---反码 是原码符号位不变，其他位按位取反
+//    //1111 1111 1111 1111 1111 1111 1111 0110  ---补码 是反码加1
+//    //  F   F    F     F    F    F    F    6     所以内存展示出来16进制是FFFFFFF6
+//
+//    return 0;
+//}
+
+//void test(void){
+//    printf("hehe\n");
+//}
+//int main(){
+//    test();
+//    return 0;
+//}
+
+//int main(){
+//    int a=10;
+//    float b=10.0;
+//
+//    printf("%p\n",&a);
+//    printf("%p\n",&b);
+//
+//    return 0;
+//}
+
+//模拟实现库函数strcpy
+//void my_strcpy(char* dest,char* source ){
+//    if(dest != NULL && source != NULL){
+//    while(*source != '\0'){
+//    *dest=*source;
+//    dest++;
+//    source++;
+//    }
+//    *dest=*source;
+//    }
+//}
+//char* my_strcpy(char* dest,const char* source ){
+//    char* ret=dest;
+//    assert(dest != NULL);
+//    assert(source != NULL);
+//    while(*source != '\0'){
+//    *dest=*source;
+//    dest++;
+//    source++;
+//    }
+//    *dest=*source;
+//    return ret;
+//}
+//
+//int main(){
+//    //strcpy
+//    //字符串拷贝
+//    char arr1[]="#######################";
+//    char arr2[]="bit";
+//
+//    printf("%s\n",my_strcpy(arr1,arr2));
+//    return 0;
+//}
+
+//int main(){
+//    int count=0;
+//    int i=0;
+//    int arr[10]={1,2,3,4,5,6,7,8,9,10};
+//
+//    printf("id arr=%p\n",arr);
+//    printf("id   i=%p\n",&i);
+//    for(i=0;i<=12;i++){
+//        printf("hehe\n");
+//        arr[i]=0;
+//    }
+//    return 0;
+//}
+
+//int main(){
+//    int i=0;
+//    int sum=0;
+//    int n=0;
+//    int ret=1;
+//    scanf("%d",&n);
+//    for(i=1;i<=n;i++){
+//        int j=0;
+//        for(j=1;j<=i;j++){
+//            ret *= j;
+//        }
+//        sum+=ret;
+//        ret=1;
+//    }
+//    printf("%d\n",sum);
+//    return 0;
+//}
 
 //求1！+2！+3！+...
 //求阶乘的模块
@@ -36,36 +379,36 @@
 //    return 0;
 //}
 
-// typedef struct Stu             //typedef相当于是把 struct Stu 类型重新起了一个名字
-// {
-//     char name[20];
-//     short age;
-//     char tele[12];
-//     char sex[5];
-// }Stu;
-
-// void Print1(Stu n){
-//     printf("name:%s\n", n.name);
-//     printf("age: %d\n", n.age);
-//     printf("tele:%s\n", n.tele);
-//     printf("sex: %s\n", n.sex);
-// }
-
-// void Print2(Stu* ps){
-//     printf("name:%s\n", ps->name);
-//     printf("age: %d\n", ps->age);
-//     printf("tele:%s\n", ps->tele);
-// }
-
-// int main(){
-//     Stu s={"lisi",20,"15566778899","nan"};
-//     //打印结构体数据
-//     //Print2更好，不管是在时间方面还是在空间方面。
-//     Print1(s);         //传结构体
-//     printf("\n");
-//     Print2(&s);        //传地址
-//     return 0;
-// }
+//typedef struct Stu             //typedef相当于是把 struct Stu 类型重新起了一个名字
+//{
+//    char name[20];
+//    short age;
+//    char tele[12];
+//    char sex[5];
+//}Stu;
+//
+//void Print1(Stu n){
+//    printf("name:%s\n", n.name);
+//    printf("age: %d\n", n.age);
+//    printf("tele:%s\n", n.tele);
+//    printf("sex: %s\n", n.sex);
+//}
+//
+//void Print2(Stu* ps){
+//    printf("name:%s\n", ps->name);
+//    printf("age: %d\n", ps->age);
+//    printf("tele:%s\n", ps->tele);
+//}
+//
+//int main(){
+//    Stu s={"lisi",20,"15566778899","nan"};
+//    //打印结构体数据
+//    //Print2更好，不管是在时间方面还是在空间方面。
+//    Print1(s);         //传结构体
+//    printf("\n");
+//    Print2(&s);        //传地址
+//    return 0;
+//}
 
 //结构体
 //struct Stu              //定义一个结构体类型
@@ -112,7 +455,6 @@
 //    printf("%s\n",p.s1.arr);
 //    return 0;
 //}
-
 
 //递归和非递归实现输出第n个斐波那契数列
 //int main(){
